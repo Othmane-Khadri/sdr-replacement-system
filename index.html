@@ -48,20 +48,22 @@
 
     body {
       font-family: var(--font-display);
-      background: var(--bg);
+      background: var(--bg-warm);
+      background-image:
+        linear-gradient(180deg, #FFFDF5 0%, #F5F3ED 40%, #FFFDF5 70%, #F8F6F0 100%);
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* Noise texture overlay */
+    /* Papyrus grain texture overlay */
     body::before {
       content: '';
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 9999;
     }
@@ -279,34 +281,34 @@
     }
 
     .pipeline {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 0;
+      align-items: stretch;
       padding: 20px 0;
-      scrollbar-width: none;
     }
-    .pipeline::-webkit-scrollbar { display: none; }
 
     .pipe-stage {
-      flex: 0 0 200px;
-      background: var(--bg-card);
+      background: #FFFFFF;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 20px;
-      position: relative;
+      border-radius: 8px;
+      padding: 28px 22px;
       transition: all 0.3s;
     }
     .pipe-stage:hover {
       border-color: var(--border-hover);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     }
     .pipe-stage .pipe-icon {
-      width: 40px; height: 40px;
-      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      width: 32px; height: 32px;
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      background: var(--grey-light);
+      color: var(--text-dim);
     }
     .pipe-stage h4 {
       font-size: 15px;
@@ -322,28 +324,19 @@
     .pipe-stage .pipe-api {
       font-family: var(--font-mono);
       font-size: 11px;
-      margin-top: 16px;
-      padding: 4px 10px;
-      border-radius: 100px;
+      margin-top: 14px;
+      padding: 3px 10px;
+      border-radius: 4px;
       display: inline-block;
+      background: var(--grey-light);
+      color: var(--text-dim);
     }
     .pipe-arrow {
-      flex: 0 0 24px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted);
-      font-size: 20px;
+      color: var(--grey-mid);
+      font-size: 18px;
+      padding: 0 6px;
     }
-
-    .pipe-stage.scrape .pipe-icon { background: var(--dark-dim); color: var(--dark); }
-    .pipe-stage.scrape .pipe-api { background: var(--dark-dim); color: var(--dark); }
-    .pipe-stage.enrich-co .pipe-icon { background: var(--gold-dim); color: var(--gold); }
-    .pipe-stage.enrich-co .pipe-api { background: var(--gold-dim); color: var(--gold); }
-    .pipe-stage.qualify .pipe-icon { background: var(--accent-dim); color: var(--gold); }
-    .pipe-stage.qualify .pipe-api { background: var(--accent-dim); color: var(--gold); }
-    .pipe-stage.enrich-ct .pipe-icon { background: var(--grey-light); color: var(--text-dim); }
-    .pipe-stage.enrich-ct .pipe-api { background: var(--grey-light); color: var(--text-dim); }
-    .pipe-stage.campaign .pipe-icon { background: var(--dark); color: #FFFFFF; }
-    .pipe-stage.campaign .pipe-api { background: var(--dark); color: #FFFFFF; }
 
     /* ===== GATES ===== */
     .gates-section { padding: 80px 0; }
@@ -560,7 +553,7 @@
       margin-bottom: 48px;
     }
     .upgrade-grid .ug-header {
-      background: var(--bg-card);
+      background: var(--grey-light);
       padding: 20px 28px;
       font-weight: 700;
       font-size: 15px;
@@ -568,7 +561,7 @@
     .upgrade-grid .ug-header:first-child { color: var(--text-dim); }
     .upgrade-grid .ug-header:last-child { color: var(--gold); }
     .upgrade-grid .ug-row {
-      background: var(--bg-elevated);
+      background: #FFFFFF;
       padding: 14px 28px;
       font-size: 14px;
       display: flex; align-items: center; gap: 8px;
@@ -638,9 +631,9 @@
       .cost-grid { grid-template-columns: 1fr; }
       .cost-vs { padding: 10px 0; }
       .stack-grid { grid-template-columns: 1fr; }
-      .gates-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .pipeline { grid-template-columns: 1fr; gap: 8px; }
+      .pipe-arrow { transform: rotate(90deg); padding: 4px 0; }
+      .gates-grid { grid-template-columns: repeat(3, 1fr); }
       .gate:nth-child(n+4) { grid-column: auto; }
       .upgrade-grid { grid-template-columns: 1fr; }
     }
@@ -666,7 +659,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">Open source lead magnet</div>
+      <div class="hero-badge">Claude Code + 4 APIs</div>
       <h1>
         <span class="strike">Hire an SDR</span><br>
         <span class="highlight">Clone a repo.</span>
@@ -706,9 +699,9 @@
           <div class="cost-price">~$300</div>
           <div class="cost-subtitle">per month total</div>
           <ul class="cost-items">
-            <li><span>Unipile (LinkedIn)</span><span>$79</span></li>
-            <li><span>Crustdata (intel)</span><span>$99</span></li>
-            <li><span>FullEnrich (email)</span><span>$49</span></li>
+            <li><span>Unipile (LinkedIn)</span><span>~$50</span></li>
+            <li><span>Crustdata (intel)</span><span>~$95</span></li>
+            <li><span>FullEnrich (email)</span><span>~$55</span></li>
             <li><span>Claude Code</span><span>$100</span></li>
             <li><span>Ramp time</span><span>10 minutes</span></li>
           </ul>
@@ -822,21 +815,21 @@
           <h3>Unipile</h3>
           <div class="stack-role">LinkedIn automation</div>
           <p>Connection requests, DMs, profile enrichment, post scraping. Clean REST API — no browser extensions or session cookies.</p>
-          <div class="stack-price">~$79/mo</div>
+          <div class="stack-price">~$50/mo</div>
           <a href="https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc" class="stack-cta" target="_blank">Create account &rarr;</a>
         </div>
         <div class="stack-card crustdata">
           <h3>Crustdata</h3>
           <div class="stack-role">Company & people intelligence</div>
           <p>Search 200M+ companies by industry, size, location. Find decision makers. Enrichment with funding, headcount, tech stack.</p>
-          <div class="stack-price">~$99/mo</div>
+          <div class="stack-price">~$95/mo</div>
           <a href="https://crustdata.com" class="stack-cta" target="_blank">Create account &rarr;</a>
         </div>
         <div class="stack-card fullenrich">
           <h3>FullEnrich</h3>
           <div class="stack-role">Email & phone enrichment</div>
           <p>Submit names + companies, get verified emails and phone numbers back. 70-85% email match rate with LinkedIn URLs.</p>
-          <div class="stack-price">~$49/mo</div>
+          <div class="stack-price">~$55/mo</div>
           <a href="https://fullenrich.com?via=sNO0yIysrHzw" class="stack-cta" target="_blank">Create account &rarr;</a>
         </div>
         <div class="stack-card notion">
