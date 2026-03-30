@@ -4,7 +4,7 @@
 
 A complete outbound system that scrapes LinkedIn engagement, qualifies leads through a 7-gate pipeline, enriches contact info, and launches personalized outreach campaigns — all orchestrated by Claude Code skills.
 
-> Built by [Othmane Khadri](https://linkedin.com/in/othmanekhadri) at [Earleads](https://earleads.com)
+> Built by [Othmane Khadri](https://www.linkedin.com/in/othmane-khadri-b48162236/) at [Earleads](https://earleads.com)
 
 ---
 
@@ -12,9 +12,9 @@ A complete outbound system that scrapes LinkedIn engagement, qualifies leads thr
 
 | API | What It Does | Setup Guide |
 |-----|-------------|-------------|
-| **[Unipile](REFERRAL_LINK_HERE)** | LinkedIn outreach — connections, DMs, profile enrichment, post scraping | [Setup](docs/api-setup/unipile.md) |
-| **[Crustdata](REFERRAL_LINK_HERE)** | Company & people intelligence — search, enrich, find decision makers | [Setup](docs/api-setup/crustdata.md) |
-| **[FullEnrich](https://fullenrich.com)** | Email & phone enrichment — verified contact data | [Setup](docs/api-setup/fullenrich.md) |
+| **[Unipile](https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc)** | LinkedIn outreach — connections, DMs, profile enrichment, post scraping | [Setup](docs/api-setup/unipile.md) |
+| **[Crustdata](https://crustdata.com)** | Company & people intelligence — search, enrich, find decision makers | [Setup](docs/api-setup/crustdata.md) |
+| **[FullEnrich](https://fullenrich.com?via=sNO0yIysrHzw)** | Email & phone enrichment — verified contact data | [Setup](docs/api-setup/fullenrich.md) |
 | **[Notion](https://notion.so)** | CRM layer — store leads, track campaigns | [Setup](docs/api-setup/notion-mcp.md) |
 
 ---

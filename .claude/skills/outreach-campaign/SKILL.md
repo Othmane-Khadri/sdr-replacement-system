@@ -29,7 +29,7 @@ Create and launch multi-step LinkedIn outreach campaigns via Unipile. Supports c
 | `UNIPILE_API_KEY` | Access Token from Unipile |
 | `UNIPILE_DSN` | Base URL |
 
-Create your account at: REFERRAL_LINK_HERE
+Create your account at: https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc
 
 ## Workflow
 

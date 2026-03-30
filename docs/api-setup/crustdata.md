@@ -4,7 +4,7 @@ Crustdata is the company and people intelligence API. It provides company search
 
 ## Step 1: Create Your Account
 
-Sign up at: **REFERRAL_LINK_HERE**
+Sign up at: **https://crustdata.com**
 
 ## Step 2: Get Your API Key
 

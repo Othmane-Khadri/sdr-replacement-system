@@ -4,7 +4,7 @@ FullEnrich is the contact enrichment API. It finds verified email addresses and 
 
 ## Step 1: Create Your Account
 
-Sign up at: https://fullenrich.com
+Sign up at: https://fullenrich.com?via=sNO0yIysrHzw
 
 ## Step 2: Get Your API Key
 

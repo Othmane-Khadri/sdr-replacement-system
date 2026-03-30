@@ -24,7 +24,7 @@ const DSN = process.env.UNIPILE_DSN;
 
 if (!API_KEY || !DSN) {
   console.error('Error: UNIPILE_API_KEY and UNIPILE_DSN must be set.');
-  console.error('Get your keys at: https://dashboard.unipile.com (REFERRAL_LINK_HERE)');
+  console.error('Get your keys at: https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc');
   process.exit(1);
 }
 

@@ -4,7 +4,7 @@ Unipile is the LinkedIn automation API. It handles connection requests, DMs, pro
 
 ## Step 1: Create Your Account
 
-Sign up at: **REFERRAL_LINK_HERE**
+Sign up at: **https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc**
 
 ## Step 2: Connect Your LinkedIn Account
 

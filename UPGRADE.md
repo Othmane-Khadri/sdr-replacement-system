@@ -53,4 +53,4 @@ We run this entire system for B2B SaaS companies.
 
 **Starting at $3,500/mo**
 
-[earleads.com](https://earleads.com) — or DM [Othmane on LinkedIn](https://linkedin.com/in/othmanekhadri)
+[earleads.com](https://earleads.com) — or DM [Othmane on LinkedIn](https://www.linkedin.com/in/othmane-khadri-b48162236/)

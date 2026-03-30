@@ -23,7 +23,7 @@ Search for companies, enrich company profiles, and find people at companies usin
 |----------|---------|
 | `CRUSTDATA_API_KEY` | API Token from Crustdata dashboard |
 
-Create your account at: REFERRAL_LINK_HERE
+Create your account at: https://crustdata.com
 
 Load from `.env`:
 ```bash
@@ -160,7 +160,7 @@ Always inform the user of estimated credit cost before executing.
 
 | Error | Fix |
 |-------|-----|
-| `CRUSTDATA_API_KEY` not set | Add to `.env` — get key at REFERRAL_LINK_HERE |
+| `CRUSTDATA_API_KEY` not set | Add to `.env` — get key at https://crustdata.com |
 | 401 Unauthorized | API key expired or invalid |
 | 429 Rate Limit | Wait 60 seconds, retry |
 | Empty results | Broaden search criteria |

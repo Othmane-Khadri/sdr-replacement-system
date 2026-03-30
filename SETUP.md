@@ -22,21 +22,21 @@ You need 3 API keys (4th is optional):
 
 ### 1. Unipile — LinkedIn Automation
 
-Sign up: **REFERRAL_LINK_HERE**
+Sign up: **https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc**
 
 1. Create account → Connect your LinkedIn via Hosted Auth
 2. Get your **Access Token** and **Base URL** from Settings → API
 
 ### 2. Crustdata — Company & People Intelligence
 
-Sign up: **REFERRAL_LINK_HERE**
+Sign up: **https://crustdata.com**
 
 1. Create account
 2. Get your **API Token** from the API Keys section
 
 ### 3. FullEnrich — Email & Phone Enrichment
 
-Sign up: https://fullenrich.com
+Sign up: https://fullenrich.com?via=sNO0yIysrHzw
 
 1. Create account
 2. Get your **API Key** from the API section

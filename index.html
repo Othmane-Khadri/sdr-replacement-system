@@ -13,28 +13,27 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0d0d0d;
-      --bg-elevated: #151515;
-      --bg-card: #1a1a1a;
-      --border: #2a2a2a;
-      --border-hover: #3a3a3a;
-      --text: #f0ede6;
-      --text-dim: #9ba1a5;
-      --text-muted: #5a5a5a;
+      --bg: #FFFFFF;
+      --bg-warm: #FFFDF5;
+      --bg-elevated: #F8F9FA;
+      --bg-card: #FFFFFF;
+      --border: #E6E6E6;
+      --border-hover: #D0D0D0;
+      --text: #111111;
+      --text-dim: #6F7375;
+      --text-muted: #9BA1A5;
       --accent: #FFE747;
-      --accent-dim: #FFE74733;
-      --accent-glow: #FFE74722;
+      --accent-dim: #FFE74730;
+      --accent-glow: #FFE74718;
+      --accent-strong: #FFD500;
       --gold: #CA9610;
-      --gold-dim: #CA961033;
-      --red: #ff4d6a;
-      --red-dim: #ff4d6a33;
-      --blue: #4d8eff;
-      --blue-dim: #4d8eff33;
-      --orange: #ff9f43;
-      --orange-dim: #ff9f4333;
-      --purple: #a855f7;
-      --purple-dim: #a855f733;
-      --yellow: #FFD500;
+      --gold-dim: #CA961020;
+      --red: #D93025;
+      --red-dim: #D9302510;
+      --dark: #111111;
+      --dark-dim: #11111110;
+      --grey-light: #F0F0F0;
+      --grey-mid: #D9D9D9;
       --font-display: 'Outfit', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -44,7 +43,7 @@
     html {
       scroll-behavior: smooth;
       scrollbar-width: thin;
-      scrollbar-color: var(--border) var(--bg);
+      scrollbar-color: var(--grey-mid) var(--bg);
     }
 
     body {
@@ -74,7 +73,7 @@
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
       padding: 16px 0;
-      background: rgba(13, 13, 13, 0.85);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
@@ -83,16 +82,16 @@
       font-family: var(--font-mono);
       font-size: 14px;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--dark);
       letter-spacing: -0.02em;
     }
-    .nav-logo span { color: var(--text-dim); }
+    .nav-logo span { color: var(--text-muted); }
     .nav-cta {
       font-family: var(--font-mono);
       font-size: 13px;
       padding: 8px 20px;
-      background: var(--accent);
-      color: var(--bg);
+      background: var(--dark);
+      color: #FFFFFF;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -100,7 +99,7 @@
       font-weight: 600;
       transition: all 0.2s;
     }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-dim); }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
 
     /* ===== HERO ===== */
     .hero {
@@ -119,18 +118,18 @@
       display: inline-flex; align-items: center; gap: 8px;
       font-family: var(--font-mono);
       font-size: 12px;
-      color: var(--accent);
-      background: var(--accent-dim);
+      color: var(--gold);
+      background: var(--gold-dim);
       padding: 6px 14px;
       border-radius: 100px;
-      border: 1px solid var(--accent-dim);
+      border: 1px solid var(--gold-dim);
       margin-bottom: 32px;
       animation: fadeInUp 0.6s ease-out;
     }
     .hero-badge::before {
       content: '';
       width: 6px; height: 6px;
-      background: var(--accent);
+      background: var(--gold);
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
@@ -147,7 +146,7 @@
       color: var(--red);
       opacity: 0.6;
     }
-    .hero h1 .highlight { color: var(--accent); }
+    .hero h1 .highlight { color: var(--gold); }
     .hero-sub {
       font-size: 20px;
       color: var(--text-dim);
@@ -164,17 +163,17 @@
       font-family: var(--font-mono);
       font-size: 14px;
       padding: 14px 32px;
-      background: var(--accent);
-      color: var(--bg);
+      background: var(--dark);
+      color: #FFFFFF;
       border: none;
-      border-radius: 8px;
+      border-radius: 50px;
       cursor: pointer;
       text-decoration: none;
       font-weight: 600;
       transition: all 0.2s;
       display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-dim); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
     .btn-secondary {
       font-family: var(--font-mono);
       font-size: 14px;
@@ -182,7 +181,7 @@
       background: transparent;
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 50px;
       cursor: pointer;
       text-decoration: none;
       font-weight: 500;
@@ -208,7 +207,7 @@
       border-color: var(--red-dim);
     }
     .cost-card.new {
-      background: linear-gradient(135deg, rgba(0,212,170,0.05), transparent);
+      background: linear-gradient(135deg, rgba(255,231,71,0.1), transparent);
       border-color: var(--accent-dim);
     }
     .cost-card h3 {
@@ -219,7 +218,7 @@
       margin-bottom: 24px;
     }
     .cost-card.old h3 { color: var(--red); }
-    .cost-card.new h3 { color: var(--accent); }
+    .cost-card.new h3 { color: var(--gold); }
     .cost-price {
       font-size: 56px;
       font-weight: 900;
@@ -228,7 +227,7 @@
       margin-bottom: 8px;
     }
     .cost-card.old .cost-price { color: var(--red); }
-    .cost-card.new .cost-price { color: var(--accent); }
+    .cost-card.new .cost-price { color: var(--gold); }
     .cost-subtitle {
       color: var(--text-dim);
       font-size: 14px;
@@ -262,7 +261,7 @@
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: var(--accent);
+      color: var(--gold);
       margin-bottom: 16px;
     }
     .section-title {
@@ -300,7 +299,7 @@
     .pipe-stage:hover {
       border-color: var(--border-hover);
       transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
     }
     .pipe-stage .pipe-icon {
       width: 40px; height: 40px;
@@ -335,16 +334,16 @@
       font-size: 20px;
     }
 
-    .pipe-stage.scrape .pipe-icon { background: var(--blue-dim); color: var(--blue); }
-    .pipe-stage.scrape .pipe-api { background: var(--blue-dim); color: var(--blue); }
-    .pipe-stage.enrich-co .pipe-icon { background: var(--purple-dim); color: var(--purple); }
-    .pipe-stage.enrich-co .pipe-api { background: var(--purple-dim); color: var(--purple); }
-    .pipe-stage.qualify .pipe-icon { background: var(--accent-dim); color: var(--accent); }
-    .pipe-stage.qualify .pipe-api { background: var(--accent-dim); color: var(--accent); }
-    .pipe-stage.enrich-ct .pipe-icon { background: var(--orange-dim); color: var(--orange); }
-    .pipe-stage.enrich-ct .pipe-api { background: var(--orange-dim); color: var(--orange); }
-    .pipe-stage.campaign .pipe-icon { background: var(--red-dim); color: var(--red); }
-    .pipe-stage.campaign .pipe-api { background: var(--red-dim); color: var(--red); }
+    .pipe-stage.scrape .pipe-icon { background: var(--dark-dim); color: var(--dark); }
+    .pipe-stage.scrape .pipe-api { background: var(--dark-dim); color: var(--dark); }
+    .pipe-stage.enrich-co .pipe-icon { background: var(--gold-dim); color: var(--gold); }
+    .pipe-stage.enrich-co .pipe-api { background: var(--gold-dim); color: var(--gold); }
+    .pipe-stage.qualify .pipe-icon { background: var(--accent-dim); color: var(--gold); }
+    .pipe-stage.qualify .pipe-api { background: var(--accent-dim); color: var(--gold); }
+    .pipe-stage.enrich-ct .pipe-icon { background: var(--grey-light); color: var(--text-dim); }
+    .pipe-stage.enrich-ct .pipe-api { background: var(--grey-light); color: var(--text-dim); }
+    .pipe-stage.campaign .pipe-icon { background: var(--dark); color: #FFFFFF; }
+    .pipe-stage.campaign .pipe-api { background: var(--dark); color: #FFFFFF; }
 
     /* ===== GATES ===== */
     .gates-section { padding: 80px 0; }
@@ -362,7 +361,7 @@
       transition: all 0.3s;
       position: relative;
     }
-    .gate:hover { border-color: var(--accent-dim); transform: translateY(-2px); }
+    .gate:hover { border-color: var(--gold-dim); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
     .gate-num {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -376,18 +375,18 @@
       letter-spacing: -0.02em;
     }
     .gate p { font-size: 11px; color: var(--text-dim); }
-    .gate.free .gate-num { color: var(--accent); }
-    .gate.paid .gate-num { color: var(--orange); }
+    .gate.free .gate-num { color: var(--gold); }
+    .gate.paid .gate-num { color: var(--dark); }
     .gate-divider {
       grid-column: 1 / -1;
       text-align: center;
       padding: 8px;
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--orange);
-      border: 1px dashed var(--orange-dim);
+      color: var(--gold);
+      border: 1px dashed var(--gold-dim);
       border-radius: 6px;
-      background: var(--orange-dim);
+      background: var(--gold-dim);
     }
 
     /* ===== STACK ===== */
@@ -412,10 +411,10 @@
       position: absolute; top: 0; left: 0; right: 0;
       height: 3px;
     }
-    .stack-card.unipile::before { background: var(--blue); }
-    .stack-card.crustdata::before { background: var(--purple); }
-    .stack-card.fullenrich::before { background: var(--orange); }
-    .stack-card.notion::before { background: var(--text-dim); }
+    .stack-card.unipile::before { background: var(--dark); }
+    .stack-card.crustdata::before { background: var(--gold); }
+    .stack-card.fullenrich::before { background: var(--accent-strong); }
+    .stack-card.notion::before { background: var(--grey-mid); }
     .stack-card h3 {
       font-size: 22px;
       font-weight: 700;
@@ -450,14 +449,14 @@
       transition: all 0.2s;
       font-weight: 500;
     }
-    .stack-card.unipile .stack-cta { background: var(--blue-dim); color: var(--blue); }
-    .stack-card.unipile .stack-cta:hover { background: var(--blue); color: var(--bg); }
-    .stack-card.crustdata .stack-cta { background: var(--purple-dim); color: var(--purple); }
-    .stack-card.crustdata .stack-cta:hover { background: var(--purple); color: var(--bg); }
-    .stack-card.fullenrich .stack-cta { background: var(--orange-dim); color: var(--orange); }
-    .stack-card.fullenrich .stack-cta:hover { background: var(--orange); color: var(--bg); }
-    .stack-card.notion .stack-cta { background: rgba(136,136,160,0.15); color: var(--text-dim); }
-    .stack-card.notion .stack-cta:hover { background: var(--text-dim); color: var(--bg); }
+    .stack-card.unipile .stack-cta { background: var(--dark-dim); color: var(--dark); }
+    .stack-card.unipile .stack-cta:hover { background: var(--dark); color: #FFFFFF; }
+    .stack-card.crustdata .stack-cta { background: var(--gold-dim); color: var(--gold); }
+    .stack-card.crustdata .stack-cta:hover { background: var(--gold); color: #FFFFFF; }
+    .stack-card.fullenrich .stack-cta { background: var(--accent-dim); color: var(--gold); }
+    .stack-card.fullenrich .stack-cta:hover { background: var(--accent-strong); color: var(--dark); }
+    .stack-card.notion .stack-cta { background: var(--grey-light); color: var(--text-dim); }
+    .stack-card.notion .stack-cta:hover { background: var(--text-dim); color: #FFFFFF; }
 
     /* ===== SKILLS ===== */
     .skills-section { padding: 100px 0; }
@@ -477,7 +476,7 @@
     .skill-num {
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--accent);
+      color: var(--gold);
       margin-bottom: 12px;
     }
     .skill-card h4 {
@@ -490,8 +489,8 @@
     .skill-trigger {
       font-family: var(--font-mono);
       font-size: 12px;
-      color: var(--accent);
-      background: var(--accent-dim);
+      color: var(--gold);
+      background: var(--gold-dim);
       padding: 6px 12px;
       border-radius: 6px;
       margin-top: 16px;
@@ -501,8 +500,8 @@
     /* ===== TERMINAL ===== */
     .terminal-section { padding: 80px 0; }
     .terminal {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
+      background: #111111;
+      border: 1px solid #2a2a2a;
       border-radius: 12px;
       overflow: hidden;
       max-width: 800px;
@@ -511,8 +510,8 @@
     .terminal-bar {
       display: flex; align-items: center; gap: 8px;
       padding: 14px 20px;
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
     }
     .terminal-dot {
       width: 12px; height: 12px;
@@ -533,10 +532,10 @@
       font-size: 13px;
       line-height: 2;
     }
-    .terminal-body .cmd { color: var(--accent); }
-    .terminal-body .comment { color: var(--text-muted); }
-    .terminal-body .output { color: var(--text-dim); }
-    .terminal-body .highlight { color: var(--yellow); }
+    .terminal-body .cmd { color: #FFE747; }
+    .terminal-body .comment { color: #666; }
+    .terminal-body .output { color: #ccc; }
+    .terminal-body .highlight { color: #FFD500; }
 
     /* ===== UPGRADE ===== */
     .upgrade-section {
@@ -567,7 +566,7 @@
       font-size: 15px;
     }
     .upgrade-grid .ug-header:first-child { color: var(--text-dim); }
-    .upgrade-grid .ug-header:last-child { color: var(--accent); }
+    .upgrade-grid .ug-header:last-child { color: var(--gold); }
     .upgrade-grid .ug-row {
       background: var(--bg-elevated);
       padding: 14px 28px;
@@ -576,8 +575,8 @@
     }
     .upgrade-grid .ug-row.dim { color: var(--text-dim); }
     .upgrade-grid .ug-row.bright { color: var(--text); }
-    .ug-check { color: var(--accent); }
-    .ug-cross { color: var(--text-muted); }
+    .ug-check { color: var(--gold); }
+    .ug-cross { color: var(--grey-mid); }
 
     /* ===== CTA FINAL ===== */
     .cta-section {
@@ -612,7 +611,7 @@
       color: var(--text-muted);
     }
     footer a { color: var(--text-dim); text-decoration: none; }
-    footer a:hover { color: var(--accent); }
+    footer a:hover { color: var(--gold); }
 
     /* ===== ANIMATIONS ===== */
     @keyframes fadeInUp {
@@ -824,21 +823,21 @@
           <div class="stack-role">LinkedIn automation</div>
           <p>Connection requests, DMs, profile enrichment, post scraping. Clean REST API — no browser extensions or session cookies.</p>
           <div class="stack-price">~$79/mo</div>
-          <a href="REFERRAL_LINK_HERE" class="stack-cta" target="_blank">Create account &rarr;</a>
+          <a href="https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc" class="stack-cta" target="_blank">Create account &rarr;</a>
         </div>
         <div class="stack-card crustdata">
           <h3>Crustdata</h3>
           <div class="stack-role">Company & people intelligence</div>
           <p>Search 200M+ companies by industry, size, location. Find decision makers. Enrichment with funding, headcount, tech stack.</p>
           <div class="stack-price">~$99/mo</div>
-          <a href="REFERRAL_LINK_HERE" class="stack-cta" target="_blank">Create account &rarr;</a>
+          <a href="https://crustdata.com" class="stack-cta" target="_blank">Create account &rarr;</a>
         </div>
         <div class="stack-card fullenrich">
           <h3>FullEnrich</h3>
           <div class="stack-role">Email & phone enrichment</div>
           <p>Submit names + companies, get verified emails and phone numbers back. 70-85% email match rate with LinkedIn URLs.</p>
           <div class="stack-price">~$49/mo</div>
-          <a href="https://fullenrich.com" class="stack-cta" target="_blank">Create account &rarr;</a>
+          <a href="https://fullenrich.com?via=sNO0yIysrHzw" class="stack-cta" target="_blank">Create account &rarr;</a>
         </div>
         <div class="stack-card notion">
           <h3>Notion</h3>
@@ -966,14 +965,14 @@
   <!-- CTA -->
   <section class="cta-section reveal">
     <div class="container">
-      <h2>Start in <span style="color: var(--accent);">10 minutes.</span></h2>
+      <h2>Start in <span style="color: var(--gold);">10 minutes.</span></h2>
       <p>Clone the repo. Add your API keys. Open Claude Code. That's it.</p>
       <div class="cta-actions">
         <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" class="btn-primary" target="_blank">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           Clone the repo
         </a>
-        <a href="https://linkedin.com/in/othmanekhadri" class="btn-secondary" target="_blank">Follow the build on LinkedIn</a>
+        <a href="https://www.linkedin.com/in/othmane-khadri-b48162236/" class="btn-secondary" target="_blank">Follow the build on LinkedIn</a>
       </div>
     </div>
   </section>
@@ -981,7 +980,7 @@
   <!-- FOOTER -->
   <footer>
     <div class="container">
-      <p>Built by <a href="https://linkedin.com/in/othmanekhadri" target="_blank">Othmane Khadri</a> at <a href="https://earleads.com" target="_blank">Earleads</a> &middot; MIT License &middot; <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" target="_blank">GitHub</a></p>
+      <p>Built by <a href="https://www.linkedin.com/in/othmane-khadri-b48162236/" target="_blank">Othmane Khadri</a> at <a href="https://earleads.com" target="_blank">Earleads</a> &middot; MIT License &middot; <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" target="_blank">GitHub</a></p>
     </div>
   </footer>
 
