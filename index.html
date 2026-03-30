@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The SDR Replacement System — Claude Code + 4 APIs</title>
+  <meta name="description" content="Replace your SDR with Claude Code and 4 APIs. ~$100/mo instead of $3,000+. Scrape, qualify, enrich, and outreach — all automated.">
+  <meta property="og:title" content="The SDR Replacement System">
+  <meta property="og:description" content="Replace your SDR with Claude Code + 4 APIs. ~$100/mo instead of $3,000+/mo.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-elevated: #12121a;
+      --bg-card: #16161f;
+      --border: #1e1e2e;
+      --border-hover: #2a2a3e;
+      --text: #e4e4ef;
+      --text-dim: #8888a0;
+      --text-muted: #55556a;
+      --accent: #00d4aa;
+      --accent-dim: #00d4aa33;
+      --accent-glow: #00d4aa22;
+      --red: #ff4d6a;
+      --red-dim: #ff4d6a33;
+      --blue: #4d8eff;
+      --blue-dim: #4d8eff33;
+      --orange: #ff9f43;
+      --orange-dim: #ff9f4333;
+      --purple: #a855f7;
+      --purple-dim: #a855f733;
+      --yellow: #fbbf24;
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) var(--bg);
+    }
+
+    body {
+      font-family: var(--font-display);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--text-dim); }
+    .nav-cta {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 8px 20px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-dim); }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 160px 0 100px;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--accent-dim);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    .hero h1 {
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+    .hero h1 .strike {
+      text-decoration: line-through;
+      color: var(--red);
+      opacity: 0.6;
+    }
+    .hero h1 .highlight { color: var(--accent); }
+    .hero-sub {
+      font-size: 20px;
+      color: var(--text-dim);
+      max-width: 640px;
+      font-weight: 300;
+      margin-bottom: 48px;
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+    .btn-primary {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      padding: 14px 32px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-dim); }
+    .btn-secondary {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--border-hover); background: var(--bg-elevated); }
+
+    /* ===== COST COMPARE ===== */
+    .cost-section { padding: 80px 0; }
+    .cost-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .cost-card {
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    .cost-card.old {
+      background: linear-gradient(135deg, rgba(255,77,106,0.05), transparent);
+      border-color: var(--red-dim);
+    }
+    .cost-card.new {
+      background: linear-gradient(135deg, rgba(0,212,170,0.05), transparent);
+      border-color: var(--accent-dim);
+    }
+    .cost-card h3 {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+    .cost-card.old h3 { color: var(--red); }
+    .cost-card.new h3 { color: var(--accent); }
+    .cost-price {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .cost-card.old .cost-price { color: var(--red); }
+    .cost-card.new .cost-price { color: var(--accent); }
+    .cost-subtitle {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .cost-items { list-style: none; }
+    .cost-items li {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-dim);
+    }
+    .cost-items li:last-child { border: none; }
+    .cost-vs {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ===== PIPELINE ===== */
+    .pipeline-section {
+      padding: 100px 0;
+      position: relative;
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: var(--text-dim);
+      font-size: 18px;
+      max-width: 560px;
+      margin-bottom: 64px;
+      font-weight: 300;
+    }
+
+    .pipeline {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 20px 0;
+      scrollbar-width: none;
+    }
+    .pipeline::-webkit-scrollbar { display: none; }
+
+    .pipe-stage {
+      flex: 0 0 200px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 20px;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .pipe-stage:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .pipe-stage .pipe-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .pipe-stage h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .pipe-stage p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .pipe-stage .pipe-api {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      margin-top: 16px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      display: inline-block;
+    }
+    .pipe-arrow {
+      flex: 0 0 24px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      font-size: 20px;
+    }
+
+    .pipe-stage.scrape .pipe-icon { background: var(--blue-dim); color: var(--blue); }
+    .pipe-stage.scrape .pipe-api { background: var(--blue-dim); color: var(--blue); }
+    .pipe-stage.enrich-co .pipe-icon { background: var(--purple-dim); color: var(--purple); }
+    .pipe-stage.enrich-co .pipe-api { background: var(--purple-dim); color: var(--purple); }
+    .pipe-stage.qualify .pipe-icon { background: var(--accent-dim); color: var(--accent); }
+    .pipe-stage.qualify .pipe-api { background: var(--accent-dim); color: var(--accent); }
+    .pipe-stage.enrich-ct .pipe-icon { background: var(--orange-dim); color: var(--orange); }
+    .pipe-stage.enrich-ct .pipe-api { background: var(--orange-dim); color: var(--orange); }
+    .pipe-stage.campaign .pipe-icon { background: var(--red-dim); color: var(--red); }
+    .pipe-stage.campaign .pipe-api { background: var(--red-dim); color: var(--red); }
+
+    /* ===== GATES ===== */
+    .gates-section { padding: 80px 0; }
+    .gates-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .gate {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 14px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .gate:hover { border-color: var(--accent-dim); transform: translateY(-2px); }
+    .gate-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .gate h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .gate p { font-size: 11px; color: var(--text-dim); }
+    .gate.free .gate-num { color: var(--accent); }
+    .gate.paid .gate-num { color: var(--orange); }
+    .gate-divider {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--orange);
+      border: 1px dashed var(--orange-dim);
+      border-radius: 6px;
+      background: var(--orange-dim);
+    }
+
+    /* ===== STACK ===== */
+    .stack-section { padding: 100px 0; }
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .stack-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stack-card:hover { border-color: var(--border-hover); }
+    .stack-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .stack-card.unipile::before { background: var(--blue); }
+    .stack-card.crustdata::before { background: var(--purple); }
+    .stack-card.fullenrich::before { background: var(--orange); }
+    .stack-card.notion::before { background: var(--text-dim); }
+    .stack-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+    .stack-card .stack-role {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+    .stack-card p {
+      font-size: 15px;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .stack-card .stack-price {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .stack-card .stack-cta {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .stack-card.unipile .stack-cta { background: var(--blue-dim); color: var(--blue); }
+    .stack-card.unipile .stack-cta:hover { background: var(--blue); color: var(--bg); }
+    .stack-card.crustdata .stack-cta { background: var(--purple-dim); color: var(--purple); }
+    .stack-card.crustdata .stack-cta:hover { background: var(--purple); color: var(--bg); }
+    .stack-card.fullenrich .stack-cta { background: var(--orange-dim); color: var(--orange); }
+    .stack-card.fullenrich .stack-cta:hover { background: var(--orange); color: var(--bg); }
+    .stack-card.notion .stack-cta { background: rgba(136,136,160,0.15); color: var(--text-dim); }
+    .stack-card.notion .stack-cta:hover { background: var(--text-dim); color: var(--bg); }
+
+    /* ===== SKILLS ===== */
+    .skills-section { padding: 100px 0; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 16px;
+    }
+    .skill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: all 0.3s;
+    }
+    .skill-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .skill-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .skill-card h4 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .skill-card p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+    .skill-trigger {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 6px 12px;
+      border-radius: 6px;
+      margin-top: 16px;
+      display: inline-block;
+    }
+
+    /* ===== TERMINAL ===== */
+    .terminal-section { padding: 80px 0; }
+    .terminal {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .terminal-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 20px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+    .terminal-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .terminal-dot.r { background: #ff5f57; }
+    .terminal-dot.y { background: #febc2e; }
+    .terminal-dot.g { background: #28c840; }
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 2;
+    }
+    .terminal-body .cmd { color: var(--accent); }
+    .terminal-body .comment { color: var(--text-muted); }
+    .terminal-body .output { color: var(--text-dim); }
+    .terminal-body .highlight { color: var(--yellow); }
+
+    /* ===== UPGRADE ===== */
+    .upgrade-section {
+      padding: 100px 0;
+      position: relative;
+    }
+    .upgrade-section::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .upgrade-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+    .upgrade-grid .ug-header {
+      background: var(--bg-card);
+      padding: 20px 28px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .upgrade-grid .ug-header:first-child { color: var(--text-dim); }
+    .upgrade-grid .ug-header:last-child { color: var(--accent); }
+    .upgrade-grid .ug-row {
+      background: var(--bg-elevated);
+      padding: 14px 28px;
+      font-size: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .upgrade-grid .ug-row.dim { color: var(--text-dim); }
+    .upgrade-grid .ug-row.bright { color: var(--text); }
+    .ug-check { color: var(--accent); }
+    .ug-cross { color: var(--text-muted); }
+
+    /* ===== CTA FINAL ===== */
+    .cta-section {
+      padding: 100px 0 120px;
+      text-align: center;
+      position: relative;
+    }
+    .cta-section h2 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 20px;
+    }
+    .cta-section p {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 500px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+    }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--text-dim); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .cost-grid { grid-template-columns: 1fr; }
+      .cost-vs { padding: 10px 0; }
+      .stack-grid { grid-template-columns: 1fr; }
+      .gates-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .gate:nth-child(n+4) { grid-column: auto; }
+      .upgrade-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 36px; }
+      .gates-grid { grid-template-columns: repeat(2, 1fr); }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .cta-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <div class="nav-logo">sdr-replacement<span>.system</span></div>
+      <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" class="nav-cta" target="_blank">Get the repo</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">Open source lead magnet</div>
+      <h1>
+        <span class="strike">Hire an SDR</span><br>
+        <span class="highlight">Clone a repo.</span>
+      </h1>
+      <p class="hero-sub">
+        Claude Code + 4 APIs. 5 skills that scrape, qualify, enrich, and outreach — all for ~$100/mo. No SDR salary. No ramp time. No spreadsheet glue.
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" class="btn-primary" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Clone the repo
+        </a>
+        <a href="#pipeline" class="btn-secondary">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COST COMPARISON -->
+  <section class="cost-section reveal">
+    <div class="container">
+      <div class="cost-grid">
+        <div class="cost-card old">
+          <h3>The old way</h3>
+          <div class="cost-price">$3,700+</div>
+          <div class="cost-subtitle">per month minimum</div>
+          <ul class="cost-items">
+            <li><span>SDR salary</span><span>$3,000</span></li>
+            <li><span>Apollo / ZoomInfo</span><span>$200</span></li>
+            <li><span>Clay / enrichment</span><span>$149</span></li>
+            <li><span>Outreach.io</span><span>$65</span></li>
+            <li><span>Ramp time</span><span>3-6 months</span></li>
+          </ul>
+        </div>
+        <div class="cost-vs">vs</div>
+        <div class="cost-card new">
+          <h3>The new stack</h3>
+          <div class="cost-price">~$113</div>
+          <div class="cost-subtitle">per month total</div>
+          <ul class="cost-items">
+            <li><span>Unipile (LinkedIn)</span><span>$39</span></li>
+            <li><span>Crustdata (intel)</span><span>$25</span></li>
+            <li><span>FullEnrich (email)</span><span>$29</span></li>
+            <li><span>Claude Code</span><span>$20</span></li>
+            <li><span>Ramp time</span><span>10 minutes</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section class="pipeline-section reveal" id="pipeline">
+    <div class="container">
+      <div class="section-label">The Pipeline</div>
+      <h2 class="section-title">Five stages. Fully automated.</h2>
+      <p class="section-desc">Each stage is a Claude Code skill. They chain together through JSON output files — the next skill reads from the previous one.</p>
+
+      <div class="pipeline">
+        <div class="pipe-stage scrape">
+          <div class="pipe-icon">1</div>
+          <h4>Scrape Engagement</h4>
+          <p>Scrape commenters and likers from any LinkedIn post. Up to 3K profiles per post.</p>
+          <span class="pipe-api">Unipile</span>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-stage enrich-co">
+          <div class="pipe-icon">2</div>
+          <h4>Enrich Companies</h4>
+          <p>Search companies by criteria. Get headcount, funding, industry, tech stack.</p>
+          <span class="pipe-api">Crustdata</span>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-stage qualify">
+          <div class="pipe-icon">3</div>
+          <h4>7-Gate Qualifier</h4>
+          <p>Score leads 0-100. Cheap filters first, API calls last. ~60% filtered for free.</p>
+          <span class="pipe-api">Unipile + Config</span>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-stage enrich-ct">
+          <div class="pipe-icon">4</div>
+          <h4>Enrich Contacts</h4>
+          <p>Get verified emails and phone numbers. 70-85% match rate with LinkedIn URLs.</p>
+          <span class="pipe-api">FullEnrich</span>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-stage campaign">
+          <div class="pipe-icon">5</div>
+          <h4>Launch Campaign</h4>
+          <p>3-step LinkedIn sequence. Connect with note, DM1, DM2. 30/day limit.</p>
+          <span class="pipe-api">Unipile</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GATES -->
+  <section class="gates-section reveal">
+    <div class="container">
+      <div class="section-label">The Qualifier</div>
+      <h2 class="section-title">7 gates. Cheap filters first.</h2>
+      <p class="section-desc">The waterfall architecture saves money — only 40% of leads reach the API call. The rest are filtered for free.</p>
+
+      <div class="gates-grid">
+        <div class="gate free">
+          <div class="gate-num">GATE 0</div>
+          <h4>Dedup</h4>
+          <p>Skip already-processed</p>
+        </div>
+        <div class="gate free">
+          <div class="gate-num">GATE 1</div>
+          <h4>Pre-Qualify</h4>
+          <p>Filter students, big corps</p>
+        </div>
+        <div class="gate free">
+          <div class="gate-num">GATE 2</div>
+          <h4>Exclude</h4>
+          <p>Block clients & partners</p>
+        </div>
+        <div class="gate paid">
+          <div class="gate-num">GATE 3 &middot; API</div>
+          <h4>Enrich</h4>
+          <p>LinkedIn profile lookup</p>
+        </div>
+        <div class="gate free">
+          <div class="gate-num">GATE 4</div>
+          <h4>Role Fit</h4>
+          <p>Match title to ICP</p>
+        </div>
+        <div class="gate free">
+          <div class="gate-num">GATE 5</div>
+          <h4>Company</h4>
+          <p>B2B + right size</p>
+        </div>
+        <div class="gate free">
+          <div class="gate-num">GATE 6</div>
+          <h4>Score</h4>
+          <p>0-100 final score</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section class="stack-section reveal" id="stack">
+    <div class="container">
+      <div class="section-label">The Stack</div>
+      <h2 class="section-title">4 APIs. One orchestrator.</h2>
+      <p class="section-desc">Each API does one thing well. Claude Code orchestrates them through skill files.</p>
+
+      <div class="stack-grid">
+        <div class="stack-card unipile">
+          <h3>Unipile</h3>
+          <div class="stack-role">LinkedIn automation</div>
+          <p>Connection requests, DMs, profile enrichment, post scraping. Clean REST API — no browser extensions or session cookies.</p>
+          <div class="stack-price">~$39/mo</div>
+          <a href="REFERRAL_LINK_HERE" class="stack-cta" target="_blank">Create account &rarr;</a>
+        </div>
+        <div class="stack-card crustdata">
+          <h3>Crustdata</h3>
+          <div class="stack-role">Company & people intelligence</div>
+          <p>Search 200M+ companies by industry, size, location. Find decision makers. Enrichment with funding, headcount, tech stack.</p>
+          <div class="stack-price">~$25/mo</div>
+          <a href="REFERRAL_LINK_HERE" class="stack-cta" target="_blank">Create account &rarr;</a>
+        </div>
+        <div class="stack-card fullenrich">
+          <h3>FullEnrich</h3>
+          <div class="stack-role">Email & phone enrichment</div>
+          <p>Submit names + companies, get verified emails and phone numbers back. 70-85% email match rate with LinkedIn URLs.</p>
+          <div class="stack-price">~$29/mo</div>
+          <a href="https://fullenrich.com" class="stack-cta" target="_blank">Create account &rarr;</a>
+        </div>
+        <div class="stack-card notion">
+          <h3>Notion</h3>
+          <div class="stack-role">CRM layer (optional)</div>
+          <p>Store qualified leads, track campaign progress, export results. Or just use the JSON/CSV output files.</p>
+          <div class="stack-price">Free tier</div>
+          <a href="https://notion.so" class="stack-cta" target="_blank">Create workspace &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills-section reveal" id="skills">
+    <div class="container">
+      <div class="section-label">The Skills</div>
+      <h2 class="section-title">5 Claude Code skills. Ready to use.</h2>
+      <p class="section-desc">Just open Claude Code in the repo and talk naturally. Skills trigger automatically.</p>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-num">SKILL 01</div>
+          <h4>LinkedIn Engagement Scraper</h4>
+          <p>Scrape commenters and likers from any LinkedIn post URL. Auto-paginates, exports JSON + CSV.</p>
+          <span class="skill-trigger">"scrape this LinkedIn post"</span>
+        </div>
+        <div class="skill-card">
+          <div class="skill-num">SKILL 02</div>
+          <h4>Company Enrichment</h4>
+          <p>Search companies by industry, size, and location. Enrich domains with full profiles. Find decision makers.</p>
+          <span class="skill-trigger">"find companies in fintech"</span>
+        </div>
+        <div class="skill-card">
+          <div class="skill-num">SKILL 03</div>
+          <h4>Contact Enrichment</h4>
+          <p>Bulk email and phone enrichment. Async processing with smart polling. Outputs verified contact data.</p>
+          <span class="skill-trigger">"enrich emails for these leads"</span>
+        </div>
+        <div class="skill-card">
+          <div class="skill-num">SKILL 04</div>
+          <h4>Lead Qualifier</h4>
+          <p>7-gate waterfall pipeline. Customizable scoring rubric, company disqualifiers, and tag taxonomy.</p>
+          <span class="skill-trigger">"qualify these leads"</span>
+        </div>
+        <div class="skill-card">
+          <div class="skill-num">SKILL 05</div>
+          <h4>Outreach Campaign</h4>
+          <p>3-step LinkedIn sequence: connect with note, DM1 after accept, DM2 follow-up. 30/day safety limit.</p>
+          <span class="skill-trigger">"create outreach campaign"</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMINAL -->
+  <section class="terminal-section reveal">
+    <div class="container">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot r"></div>
+          <div class="terminal-dot y"></div>
+          <div class="terminal-dot g"></div>
+          <span class="terminal-title">claude &mdash; sdr-replacement-system</span>
+        </div>
+        <div class="terminal-body">
+          <span class="comment"># Step 1: Scrape a viral post</span><br>
+          <span class="cmd">&gt;</span> <span class="output">Scrape this post: linkedin.com/posts/johndoe-ai-sales...</span><br>
+          <span class="highlight">  Found 847 engagers (312 comments, 535 reactions)</span><br>
+          <span class="highlight">  Saved to ./output/linkedin_scrape_both_2026-03-30.json</span><br><br>
+          <span class="comment"># Step 2: Qualify them</span><br>
+          <span class="cmd">&gt;</span> <span class="output">Qualify these leads</span><br>
+          <span class="highlight">  Gate 0-2: 518 filtered (free) | Gate 3: 329 enriched (API)</span><br>
+          <span class="highlight">  Result: 42 Hot, 89 Warm, 198 Monitor, 518 Disqualified</span><br><br>
+          <span class="comment"># Step 3: Launch campaign</span><br>
+          <span class="cmd">&gt;</span> <span class="output">Create outreach campaign for hot leads</span><br>
+          <span class="highlight">  Campaign: "AI Sales Leaders March 2026"</span><br>
+          <span class="highlight">  Sending 30 connection requests today... Done.</span><br>
+          <span class="highlight">  12 remaining queued for tomorrow.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPGRADE -->
+  <section class="upgrade-section reveal" id="upgrade">
+    <div class="container">
+      <div class="section-label">Want more?</div>
+      <h2 class="section-title">This repo is the starting point.</h2>
+      <p class="section-desc">The full GTM-OS adds intelligence, learning, and automation on top of the same pipeline.</p>
+
+      <div class="upgrade-grid">
+        <div class="ug-header">This Repo</div>
+        <div class="ug-header">GTM-OS (Free)</div>
+
+        <div class="ug-row dim"><span class="ug-cross">&mdash;</span> Single message template</div>
+        <div class="ug-row bright"><span class="ug-check">&check;</span> Multi-variant A/B testing</div>
+
+        <div class="ug-row dim"><span class="ug-cross">&mdash;</span> Manual campaign runs</div>
+        <div class="ug-row bright"><span class="ug-check">&check;</span> Automated daily tracker</div>
+
+        <div class="ug-row dim"><span class="ug-cross">&mdash;</span> No learning loop</div>
+        <div class="ug-row bright"><span class="ug-check">&check;</span> RLHF feedback (system improves)</div>
+
+        <div class="ug-row dim"><span class="ug-cross">&mdash;</span> No analytics</div>
+        <div class="ug-row bright"><span class="ug-check">&check;</span> Weekly intelligence reports</div>
+
+        <div class="ug-row dim"><span class="ug-cross">&mdash;</span> CSV/JSON output</div>
+        <div class="ug-row bright"><span class="ug-check">&check;</span> Full Notion CRM sync</div>
+
+        <div class="ug-row dim"><span class="ug-cross">&mdash;</span> No knowledge base</div>
+        <div class="ug-row bright"><span class="ug-check">&check;</span> Upload ICP docs, AI uses them</div>
+      </div>
+
+      <div style="text-align: center;">
+        <a href="https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system" class="btn-primary" target="_blank" style="margin-right: 12px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Get GTM-OS (free)
+        </a>
+        <a href="https://earleads.com" class="btn-secondary" target="_blank">Want it done for you?</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <div class="container">
+      <h2>Start in <span style="color: var(--accent);">10 minutes.</span></h2>
+      <p>Clone the repo. Add your API keys. Open Claude Code. That's it.</p>
+      <div class="cta-actions">
+        <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" class="btn-primary" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Clone the repo
+        </a>
+        <a href="https://linkedin.com/in/othmanekhadri" class="btn-secondary" target="_blank">Follow the build on LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>Built by <a href="https://linkedin.com/in/othmanekhadri" target="_blank">Othmane Khadri</a> at <a href="https://earleads.com" target="_blank">Earleads</a> &middot; MIT License &middot; <a href="https://github.com/Othmane-Khadri/sdr-replacement-system" target="_blank">GitHub</a></p>
+    </div>
+  </footer>
+
+  <!-- Scroll reveal -->
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
